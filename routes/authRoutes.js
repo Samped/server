@@ -26,7 +26,9 @@ router.post("/signup", async (req, res) => {
         })
 
         if (userExit) {
-            return res.status(403).send("User already esists");
+            return res
+            .status(403)
+            .send("User already esists");
         }
 
         if(!validateName(name)) {
@@ -36,7 +38,9 @@ router.post("/signup", async (req, res) => {
         }
 
         if(!validateEmail(email)) {
-            return res.status(400).send("Invalid email")
+            return res
+            .status(400)
+            .send("Invalid email")
         }
 
         if(!validatePassword(password)) {
@@ -58,7 +62,9 @@ router.post("/signup", async (req, res) => {
         .status(201)
         .send(createdUser);
     }catch (err){
-        res.status(500).send(err.message);
+        res
+        .status(500)
+        .send(err.message);
     }
 
 });
@@ -68,16 +74,22 @@ router.post("/signin", async (req, res) => {
         const { email, password } = req.body;
         
         if (email.length === 0) {
-            return res.status(400).send("Error: please enter your email");
+            return res
+            .status(400)
+            .send("Error: please enter your email");
         }
         if (password.length === 0) {
-            return res.status(400).send("Error: please enter your password");
+            return res
+            .status(400)
+            .send("Error: please enter your password");
         }
 
-        const userExit = await user.findOne({ where: { email: email}});
+        const userExit = await User.findOne({ where: { email: email}});
 
         if(!userExit) {
-           return res.status(404).send("Error: User not found");
+           return res
+           .status(404)
+           .send("Error: User not found");
         }
 
         const passwordMatched = await bcrpyt.compare(
@@ -85,15 +97,20 @@ router.post("/signin", async (req, res) => {
             userExit.password);
 
         if(!passwordMatched) {
-            return res.status(400).send("Error: Incorrect password")
+            return res
+            .status(400)
+            .send("Error: Incorrect password")
         }
 
         return res
         .status(200)
         .send(`Welcome to Backend ${userExit.name}. you are logged in`);
+
     }catch(err) {
         console.log(err);
-        return res.status(500).send(err);
+        return res
+        .status(500)
+        .send(err);
     }
 });
 
